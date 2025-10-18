@@ -1,218 +1,150 @@
-# 🚀 Universal FHEVM SDK - Private Loan DApp
-> **Competition Submission: Framework-Agnostic Confidential Computing SDK**
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Built with FHEVM](https://img.shields.io/badge/Powered%20by-FHEVM-8A2BE2)](https://github.com/zama-ai/fhevm)
+🏦 Loan DApp - Confidential Lending Platform
+A fully homomorphic encryption (FHE) powered decentralized application for confidential loan processing. Built with FHEVM technology to ensure complete privacy for financial data.
 
-## 🎯 Competition Submission
+🌟 Features
+🔐 Confidential Loan Applications
+Encrypted Credit Scoring - Submit loan applications with fully encrypted financial data
 
-This project demonstrates a **universal, framework-agnostic FHEVM SDK** that enables confidential dApp development across any JavaScript environment, with a fully functional Private Loan DApp as the showcase application.
-## ⚡ Quick Start
+Private Financial Information - Your sensitive data remains confidential throughout the process
 
-```typescript
-// 5-line setup - works in any environment
-import { setupPrivateLoanSDK } from '@fhevm-sdk';
+Secure Data Handling - End-to-end encryption using FHEVM technology
 
-const loanSDK = await setupPrivateLoanSDK(11155111);
-const application = await loanSDK.submitLoanApplication({
-  creditScore: 750,
-  requestedAmount: '1.5 ETH'
-});
+🏛️ Lender Dashboard
+Secure Decryption - Authorized lenders can securely decrypt and review applications
 
+Privacy-Preserving - Maintain applicant privacy while enabling legitimate review
 
-### 3. **Universal SDK Features** (Mention all requirements)
-```markdown
-## 🎯 Universal FHEVM SDK Features
+EIP-712 Signing - User-controlled decryption with cryptographic signatures
 
-✅ **Framework Agnostic** - Works in React, Vue, Node.js, any environment  
-✅ **Complete FHEVM Flows** - Initialization, encrypted inputs, decryption  
-✅ **Wagmi-like API** - Modular structure, React hooks optional  
-✅ **Reusable Components** - LoanApplication, LenderDashboard  
-✅ **Quick Setup** - <10 lines to get started  
-✅ **TypeScript Ready** - Full type safety
+🛡️ Advanced Security
+Fully Homomorphic Encryption - Perform computations on encrypted data
 
+Zero-Knowledge Principles - Verify eligibility without exposing raw data
 
-## 🌐 Works Everywhere
-
-### React/Next.js (Required)
-```typescript
-import { LoanApplication } from './components/LoanApplication';
-
-Node.js (Bonus Environment)
-javascript
-const { demoPrivateLoan } = require('@fhevm-sdk');
-
-async function main() {
-  const result = await demoPrivateLoan();
-  console.log('Loan demo:', result);
-}
-
-Ready for Vue/Svelte
-typescript
-// Same universal API works across all frameworks
-import { setupPrivateLoanSDK } from '@fhevm-sdk';
-
-export default {
-  async setup() {
-    const loanSDK = await setupPrivateLoanSDK(11155111);
-    return { loanSDK };
-  }
-}
-🏦 Private Loan DApp Demo
-Confidential Credit Scoring with Fully Homomorphic Encryption
-
-🔐 Encrypted Credit Scoring - FHE-protected financial data
-
-👥 Complete Workflow - Borrower application → Lender verification → Approval
-
-📊 Real-time Status - Dynamic application tracking
-
-🎨 Professional UI - Clean, accessible interface
-
-🚀 Production Ready - Ready for real FHEVM integration
+Blockchain Integration - Transparent and auditable process on-chain
 
 🏗️ Architecture
 text
-packages/
-├── fhevm-sdk/           # 🎯 Universal SDK Core
-│   ├── src/
-│   │   ├── universal.ts # Framework-agnostic utilities
-│   │   ├── privateLoan.ts # Private Loan specific APIs
-│   │   └── react/       # React adapter (optional)
-│   └── dist/            # Built for universal usage
-├── hardhat/             # 🔗 Smart Contracts
-│   └── contracts/
-│       ├── PrivateLoan.sol # Main contract (FHE-enabled)
-│       └── FHECounter.sol  # Original template
-└── nextjs/              # ⚛️ React Showcase DApp
-    └── components/
-        ├── LoanApplication.tsx
-        └── LenderDashboard.tsx
-🛠️ Installation & Usage
+loan-dapp/
+├── packages/
+│   ├── sdk/              # Universal FHEVM SDK
+│   │   ├── src/
+│   │   │   ├── core/     # Framework-agnostic FHEVM client
+│   │   │   ├── adapters/react/  # React-specific bindings
+│   │   │   └── privateLoan.ts   # Loan-specific utilities
+│   ├── frontend/         # Next.js Loan Application
+│   │   ├── app/          # Next.js 14 app router
+│   │   ├── components/   # React components
+│   │   │   ├── LoanApplication.tsx
+│   │   │   ├── LenderDashboard.tsx
+│   │   │   └── DappWrapperWithProviders.tsx
+│   │   └── hooks/        # Custom React hooks
+│   └── hardhat/          # Smart contracts
+└── README.md
+🚀 Quick Start
+Prerequisites
+Node.js 18+
+
+pnpm package manager
+
+Modern browser with Ethereum wallet (MetaMask, etc.)
+
 Installation
 bash
-npm install @fhevm-sdk
-# or
-yarn add @fhevm-sdk
-# or
-pnpm add @fhevm-sdk
-Basic Usage
-typescript
-import { setupUniversalFHEVM, setupPrivateLoanSDK } from '@fhevm-sdk';
-
-// Universal FHEVM setup
-const fhevm = await setupUniversalFHEVM(11155111);
-
-// Private Loan specific setup
-const loanSDK = await setupPrivateLoanSDK(11155111);
-React Components
-typescript
-import { LoanApplication, LenderDashboard } from './components';
-
-function App() {
-  return (
-    <div>
-      <LoanApplication />
-      <LenderDashboard />
-    </div>
-  );
-}
-
-## 🌐 Live Deployment
-
-- **Smart Contract**: [0x908E2F62E94eF3859cC90AE779836528cb459Ae6](https://sepolia.etherscan.io/address/0x908E2F62E94eF3859cC90AE779836528cb459Ae6)
-- **DApp Demo**: [Live Demo](http://localhost:3000) *(Run `pnpm dev` in packages/nextjs)*
-- **Network**: Sepolia Testnet
-- **Status**: ✅ **Contract Successfully Deployed**
-- **Contract Features**: 
-  - 🔐 Encrypted credit scoring with FHE
-  - 📝 Private loan application workflow  
-  - 💰 Maximum loan amount: 10 ETH
-  - 🏦 Lender-controlled approval system
-  - 🎯 Production-ready FHE operations
-
-
-🔧 Development
-bash
-# Clone and setup
-git clone <your-fork-url>
-cd fhevm-universal-sdk
+# Install dependencies
 pnpm install
 
+# Build the FHEVM SDK
+pnpm sdk:build
+
+# Start the development server
+pnpm app:dev
+Visit http://localhost:3000 to access the Loan DApp.
+
+📦 Packages
+@loan-dapp/sdk
+Universal FHEVM SDK providing encryption, decryption, and FHE utilities.
+
+typescript
+import { FHEVMClient, loanUtilities } from '@loan-dapp/sdk';
+
+// Initialize FHEVM client
+const client = new FHEVMClient(provider);
+await client.init();
+
+// Encrypt credit score
+const encryptedScore = await loanUtilities.encryptCreditScore(750);
+@loan-dapp/frontend
+Next.js frontend application with Tailwind CSS styling.
+
+🔧 Development
+Build Commands
+bash
 # Build SDK
 pnpm sdk:build
 
-# Start DApp (Required: Next.js showcase)
-pnpm dev
+# Develop frontend
+pnpm app:dev
 
-# Test contracts
-pnpm contracts:test
+# Build for production
+pnpm app:build
+Smart Contracts
+bash
+# Compile contracts
+pnpm contracts:compile
 
-# Run universal SDK tests
-cd packages/fhevm-sdk
-pnpm test
-🎨 Demo Walkthrough
-Borrower Experience
+# Deploy contracts
+pnpm contracts:deploy
+🛠️ Technology Stack
+Frontend: Next.js 14, React, TypeScript, Tailwind CSS
 
-Submit loan application with encrypted credit score
+FHE Technology: FHEVM, Fully Homomorphic Encryption
 
-Real-time status tracking
+Blockchain: Ethereum, Hardhat, Ethers.js
 
-FHE-protected data handling
+Wallet Integration: RainbowKit, Wagmi
 
-Lender Experience
+Package Manager: pnpm workspaces
 
-Dashboard with all applications
+🔒 Security Features
+Encrypted Data Storage - Financial data encrypted using FHE
 
-Credit score verification using FHE
+User-Controlled Decryption - EIP-712 signatures for authorization
 
-Approval/Rejection workflow
+Zero Data Exposure - Raw data never exposed to third parties
 
-Universal SDK Power
+Auditable Process - All operations recorded on blockchain
 
-Same code works across frameworks
+💡 Use Cases
+Confidential Loan Applications - Apply for loans without exposing financial history
 
-Mock FHE operations ready for production
+Private Credit Scoring - Evaluate creditworthiness while preserving privacy
 
-Professional error handling and fallbacks
+Secure Lending Platforms - Build compliant financial applications
 
-📁 Project Structure
-text
-fhevm-universal-sdk/
-├── packages/
-│   ├── fhevm-sdk/          # Universal SDK core
-│   │   ├── src/
-│   │   │   ├── universal.ts # Framework-agnostic core
-│   │   │   ├── privateLoan.ts # Loan-specific utilities
-│   │   │   └── react/      # Optional React adapters
-│   │   └── dist/           # Built for universal usage
-│   ├── hardhat/            # Smart contracts
-│   │   └── contracts/
-│   │       └── PrivateLoan.sol # FHE-enabled loan contract
-│   └── nextjs/             # React showcase DApp
-│       └── components/
-│           ├── LoanApplication.tsx
-│           └── LenderDashboard.tsx
-├── README.md
-└── package.json
-🔮 Future Enhancements
-Real FHEVM network integration
+Privacy-First Finance - DeFi applications with enhanced privacy
 
-Multi-chain deployment
+🤝 Contributing
+We welcome contributions to improve the Loan DApp:
 
-Vue.js and Svelte examples
+Fork the repository
 
-Advanced FHE operations
+Create a feature branch
 
-Performance optimization
+Make your changes
 
-Additional confidential dApp examples
-
-👥 Team
-Built for the FHEVM Universal SDK Competition by [Your Name]
+Submit a pull request
 
 📄 License
-MIT License - see LICENSE file for details
+MIT License
 
-🚀 Revolutionizing confidential dApp development with our Universal FHEVM SDK!
+🙏 Acknowledgments
+FHEVM team for the fully homomorphic encryption technology
 
-Submission Ready: All competition requirements met with a working universal SDK and production-ready Private Loan DApp demonstration.
+Ethereum community for blockchain infrastructure
+
+Open source contributors for various dependencies
+
+Ready to experience confidential lending? Clone the repository and follow the quick start guide to run your own instance of the Loan DApp!
+
+

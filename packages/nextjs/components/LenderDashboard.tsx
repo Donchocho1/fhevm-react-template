@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { setupPrivateLoanSDK } from '@fhevm-sdk';
+import { setupPrivateLoanSDK } from '@loan-dapp/sdk';
 
 export function LenderDashboard() {
   const [applications, setApplications] = useState<any[]>([]);

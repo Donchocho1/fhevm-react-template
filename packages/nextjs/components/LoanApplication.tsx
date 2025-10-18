@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { setupPrivateLoanSDK, type LoanApplicationParams } from '@fhevm-sdk';
+import { setupPrivateLoanSDK, type LoanApplicationParams } from '@loan-dapp/sdk';
 
 export function LoanApplication() {
   const [creditScore, setCreditScore] = useState<number>(700);
@@ -31,9 +31,9 @@ export function LoanApplication() {
         setStatus(appStatus);
       }, 2000);
       
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Application failed:', error);
-      setResult({ error: error.message });
+      setResult({ error: error instanceof Error ? error.message : String(error) });
     } finally {
       setLoading(false);
     }

@@ -3,14 +3,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDeployedContractInfo } from "../helper";
 import { useWagmiEthers } from "../wagmi/useWagmiEthers";
-import { FhevmInstance } from "@fhevm-sdk";
+import type { FhevmInstance } from "@loan-dapp/sdk";
 import {
   buildParamsFromAbi,
   getEncryptionMethod,
   useFHEDecrypt,
   useFHEEncryption,
   useInMemoryStorage,
-} from "@fhevm-sdk";
+} from "@loan-dapp/sdk";
 import { ethers } from "ethers";
 import type { Contract } from "~~/utils/helper/contract";
 import type { AllowedChainIds } from "~~/utils/helper/networks";
@@ -135,7 +135,7 @@ export const useFHECounterWagmi = (parameters: {
   );
 
   const getEncryptionMethodFor = (functionName: "increment" | "decrement") => {
-    const functionAbi = fheCounter?.abi.find(item => item.type === "function" && item.name === functionName);
+    const functionAbi = fheCounter?.abi.find((item: any) => item.type === "function" && item.name === functionName);
     if (!functionAbi) return { method: undefined as string | undefined, error: `Function ABI not found for ${functionName}` } as const;
     if (!functionAbi.inputs || functionAbi.inputs.length === 0)
       return { method: undefined as string | undefined, error: `No inputs found for ${functionName}` } as const;
@@ -155,7 +155,7 @@ export const useFHECounterWagmi = (parameters: {
         if (!method) return setMessage(error ?? "Encryption method not found");
 
         setMessage(`Encrypting with ${method}...`);
-        const enc = await encryptWith(builder => {
+        const enc = await encryptWith((builder: any) => {
           (builder as any)[method](valueAbs);
         });
         if (!enc) return setMessage("Encryption failed");
