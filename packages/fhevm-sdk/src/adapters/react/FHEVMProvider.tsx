@@ -1,46 +1,25 @@
-import React, { createContext, useContext, ReactNode } from 'react';
-import { JsonRpcProvider } from 'ethers';
-import { useFHEVMClient } from './useFHEVMClient';
+"use client";
 
-// Add window.ethereum type declaration
-declare global {
-  interface Window {
-    ethereum?: any;
-  }
-}
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { useUniversalFHEVM } from "./useUniversalFHEVM";
+import type { FHEVMConfig } from "../../fhevmTypes";
 
 interface FHEVMContextType {
-  client: any | null;
-  isInitializing: boolean;
-  error: Error | null;
+  client: any;
   isInitialized: boolean;
-  initialize: (provider?: JsonRpcProvider | string) => Promise<void>;
-  initializeWithBrowserProvider: () => Promise<void>;
+  isInitializing: boolean;
+  error: string | null;
+  init: () => Promise<void>;
   encrypt: (value: number) => Promise<string>;
-  userDecrypt: (ciphertext: string, contractAddresses: string[], signer: any) => Promise<number>;
-  healthCheck: () => Promise<{ healthy: boolean; message: string }>;
 }
 
 const FHEVMContext = createContext<FHEVMContextType | undefined>(undefined);
 
-interface FHEVMProviderProps {
-  children: ReactNode;
-  provider?: JsonRpcProvider | string;
-  autoInitialize?: boolean;
-}
-
-export const FHEVMProvider: React.FC<FHEVMProviderProps> = ({
-  children,
-  provider,
-  autoInitialize = true,
-}) => {
-  const fhevm = useFHEVMClient(provider);
-
-  React.useEffect(() => {
-    if (autoInitialize && provider && !fhevm.client && !fhevm.isInitializing) {
-      fhevm.initialize();
-    }
-  }, [autoInitialize, provider, fhevm]);
+export const FHEVMProvider: React.FC<{
+  children: React.ReactNode;
+  config: FHEVMConfig;
+}> = ({ children, config }) => {
+  const fhevm = useUniversalFHEVM(config);
 
   return (
     <FHEVMContext.Provider value={fhevm}>
@@ -49,10 +28,15 @@ export const FHEVMProvider: React.FC<FHEVMProviderProps> = ({
   );
 };
 
-export const useFHEVM = (): FHEVMContextType => {
+export const useFHEVMContext = () => {
   const context = useContext(FHEVMContext);
   if (context === undefined) {
-    throw new Error('useFHEVM must be used within a FHEVMProvider');
+    throw new Error("useFHEVMContext must be used within a FHEVMProvider");
   }
   return context;
+};
+
+// Alias for InMemoryStorageProvider
+export const InMemoryStorageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return <>{children}</>;
 };

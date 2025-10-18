@@ -1,9 +1,12 @@
-export { useFHEVMClient } from './useFHEVMClient';
-export { useFHEEncryption } from './useFHEEncryption';
-export { useFHEDecrypt } from './useFHEDecrypt';
-export { useInMemoryStorage, InMemoryStorageProvider } from './useInMemoryStorage';
-export { FHEVMProvider, useFHEVM } from './FHEVMProvider';
+// Use different name to bypass cache
+export { useUniversalFHEVM } from "./useUniversalFHEVM";
 
-// Re-export core types and utilities for convenience
-export { FHEVMClient, createMemoryStorage, isValidEncryptedData, loanUtilities } from '../../core/client';
-export type { FhevmInstance } from '../../fhevmTypes';
+// Keep existing exports
+export { useFHEDecrypt } from "./useFHEDecrypt";
+export { useFHEEncryption } from "./useFHEEncryption";
+export { useFHEVMClient } from "./useFHEVMClient";
+export { useInMemoryStorage } from "./useInMemoryStorage";
+
+// FHEVM Provider component
+export { FHEVMProvider } from "./FHEVMProvider";
+export { InMemoryStorageProvider } from "./FHEVMProvider";

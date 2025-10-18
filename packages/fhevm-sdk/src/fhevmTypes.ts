@@ -1,7 +1,27 @@
+
 import type { FhevmInstance as _FhevmInstance } from "@zama-fhe/relayer-sdk/bundle";
 import type { HandleContractPair as _HandleContractPair } from "@zama-fhe/relayer-sdk/bundle";
 import type { DecryptedResults as _DecryptedResults } from "@zama-fhe/relayer-sdk/bundle";
 import type { FhevmInstanceConfig as _FhevmInstanceConfig } from "@zama-fhe/relayer-sdk/web";
+
+export interface FHEVMConfig {
+  chainId: number;
+  provider: any;
+  contractAddress?: string;
+}
+
+export interface EncryptedData {
+  ciphertext: string;
+  signature?: string;
+  publicKey?: string;
+}
+
+export interface DecryptionRequest {
+  encryptedData: EncryptedData;
+  contractAddress: string;
+  signer: any; // Ethers signer or similar
+}
+
 
 export type FhevmInstance = _FhevmInstance;
 export type FhevmInstanceConfig = _FhevmInstanceConfig;

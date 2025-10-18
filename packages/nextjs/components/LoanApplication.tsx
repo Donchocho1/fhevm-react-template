@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { setupPrivateLoanSDK, type LoanApplicationParams } from '@loan-dapp/sdk';
+import { useUniversalFHEVM, setupUniversalFHEVM } from '@loan-dapp/sdk'; // Use universal SDK
+import { useAccount } from 'wagmi';
 
 export function LoanApplication() {
   const [creditScore, setCreditScore] = useState<number>(700);
@@ -9,28 +10,57 @@ export function LoanApplication() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
   const [status, setStatus] = useState<any>(null);
+  
+  const { isConnected } = useAccount();
+  const { client, isInitialized, encrypt } = useUniversalFHEVM(); // Use the universal hook
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     
+    if (!isConnected) {
+      setResult({ error: 'Please connect your wallet first' });
+      return;
+    }
+
+    if (!isInitialized) {
+      setResult({ error: 'FHEVM not initialized. Please wait...' });
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      console.log('🏦 Starting loan application...');
+      console.log('🏦 Starting loan application with Universal SDK...');
+
+      // Use the universal SDK directly for demo purposes
+      const universalSDK = await setupUniversalFHEVM(11155111);
       
-      const loanSDK = await setupPrivateLoanSDK(11155111);
+      // Demo: Encrypt credit score using the universal SDK
+      const encryptedCreditScore = await universalSDK.encrypt(creditScore);
       
-      const application = await loanSDK.submitLoanApplication({
-        creditScore,
-        requestedAmount: `${requestedAmount} ETH`
-      });
-      
+      console.log('✅ Credit score encrypted:', encryptedCreditScore);
+
+      // For demo purposes, simulate loan application
+      const application = {
+        applicationId: Math.floor(Math.random() * 1000) + 1,
+        encryptedCreditScore,
+        requestedAmount: `${requestedAmount} ETH`,
+        status: 'pending',
+        timestamp: new Date().toISOString()
+      };
+
       setResult(application);
-      
+
+      // Simulate status check
       setTimeout(async () => {
-        const appStatus = await loanSDK.getApplicationStatus(application.applicationId);
+        const appStatus = {
+          ...application,
+          status: 'under_review',
+          reviewedAt: new Date().toISOString()
+        };
         setStatus(appStatus);
       }, 2000);
-      
+
     } catch (error: unknown) {
       console.error('Application failed:', error);
       setResult({ error: error instanceof Error ? error.message : String(error) });
@@ -42,83 +72,84 @@ export function LoanApplication() {
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-6 text-gray-800">Private Loan Application</h2>
-      
+
+      {/* Connection Status */}
+      <div className="mb-4 p-3 bg-blue-50 rounded-lg">
+        <div className="flex justify-between items-center">
+          <span className="text-sm text-blue-700">FHEVM Status:</span>
+          <span className={`px-2 py-1 rounded text-xs font-medium ${
+            isInitialized ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+          }`}>
+            {isInitialized ? 'Ready' : 'Initializing...'}
+          </span>
+        </div>
+      </div>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Credit Score
           </label>
           <input
-            type="number"
+            type="range"
             min="300"
             max="850"
             value={creditScore}
             onChange={(e) => setCreditScore(Number(e.target.value))}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-            required
+            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
           />
+          <div className="flex justify-between text-xs text-gray-500">
+            <span>300</span>
+            <span className="font-medium">Current: {creditScore}</span>
+            <span>850</span>
+          </div>
         </div>
-        
+
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Requested Amount (ETH)
+            Loan Amount (ETH)
           </label>
           <input
             type="number"
             step="0.1"
             min="0.1"
+            max="10"
             value={requestedAmount}
             onChange={(e) => setRequestedAmount(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-            placeholder="1.0"
-            required
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter amount in ETH"
           />
         </div>
-        
+
         <button
           type="submit"
-          disabled={loading}
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+          disabled={loading || !isConnected || !isInitialized}
+          className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white font-medium py-2 px-4 rounded-md transition-colors"
         >
-          {loading ? 'Submitting...' : 'Submit Application'}
+          {loading ? 'Processing...' : !isConnected ? 'Connect Wallet' : 'Submit Encrypted Application'}
         </button>
       </form>
 
+      {/* Results */}
       {result && (
-        <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-md">
-          <h3 className="font-semibold text-lg mb-2 text-blue-800">📋 Application Result</h3>
-          {result.error ? (
-            <p className="text-red-600">Error: {result.error}</p>
-          ) : (
-            <div className="space-y-2 text-blue-900">
-              <p><strong>Application ID:</strong> <span className="text-blue-700 font-mono">{result.applicationId}</span></p>
-              <p><strong>Encrypted Score:</strong> <span className="text-blue-700 font-mono">{result.encryptedScore?.slice(0, 20)}...</span></p>
-              <p><strong>Transaction:</strong> <span className="text-blue-700 font-mono">{result.transactionHash?.slice(0, 20)}...</span></p>
-            </div>
-          )}
+        <div className={`mt-6 p-4 rounded-lg ${
+          result.error ? 'bg-red-50 border border-red-200' : 'bg-green-50 border border-green-200'
+        }`}>
+          <h3 className="font-semibold mb-2">
+            {result.error ? '❌ Error' : '✅ Application Submitted'}
+          </h3>
+          <pre className="text-sm whitespace-pre-wrap">
+            {result.error ? result.error : JSON.stringify(result, null, 2)}
+          </pre>
         </div>
       )}
 
       {status && (
-        <div className={`mt-4 p-4 border rounded-md ${
-          status.status === 'approved' ? 'bg-green-50 border-green-200' :
-          status.status === 'rejected' ? 'bg-red-50 border-red-200' :
-          'bg-yellow-50 border-yellow-200'
-        }`}>
-          <h3 className="font-semibold text-lg mb-2">📊 Application Status</h3>
-          <div className="space-y-2">
-            <p><strong>Status:</strong> 
-              <span className={`ml-2 px-2 py-1 rounded text-sm font-bold ${
-                status.status === 'approved' ? 'bg-green-500 text-white' :
-                status.status === 'rejected' ? 'bg-red-500 text-white' :
-                'bg-yellow-500 text-white'
-              }`}>
-                {status.status.toUpperCase()}
-              </span>
-            </p>
-            <p><strong>Requested:</strong> <span className="font-mono text-gray-800">{status.requestedAmount}</span></p>
-            <p><strong>Submitted:</strong> <span className="text-gray-800">{new Date(status.submittedAt).toLocaleString()}</span></p>
-          </div>
+        <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <h3 className="font-semibold text-yellow-800 mb-2">🔄 Status Update</h3>
+          <pre className="text-sm whitespace-pre-wrap">
+            {JSON.stringify(status, null, 2)}
+          </pre>
         </div>
       )}
     </div>

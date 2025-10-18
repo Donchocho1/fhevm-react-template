@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { FhevmInstance } from "../fhevmTypes.js";
-import { createFhevmInstance } from "../internal/fhevm.js";
+import type { FhevmInstance } from "../../fhevmTypes";
+import { createFhevmInstance } from "../../internal/fhevm";
 import { ethers } from "ethers";
 
 function _assert(condition: boolean, message?: string): asserts condition {
@@ -78,51 +78,62 @@ export function useFhevm(parameters: {
 
     if (_isRunning === true) {
       if (_providerRef.current === undefined) {
-        _setInstance(undefined);
-        _setError(undefined);
-        _setStatus("idle");
         return;
       }
 
-      if (!_abortControllerRef.current) {
-        _abortControllerRef.current = new AbortController();
+      if (_chainIdRef.current === undefined) {
+        return;
       }
 
-      _assert(!_abortControllerRef.current.signal.aborted, "!controllerRef.current.signal.aborted");
+      if (_abortControllerRef.current) {
+        return;
+      }
+
+      const abortController = new AbortController();
+      _abortControllerRef.current = abortController;
 
       _setStatus("loading");
-      _setError(undefined);
-
-      const thisSignal = _abortControllerRef.current.signal;
-      const thisProvider = _providerRef.current;
-      const thisRpcUrlsByChainId = _mockChainsRef.current as any;
 
       createFhevmInstance({
-        signal: thisSignal,
-        provider: thisProvider as any,
-        mockChains: thisRpcUrlsByChainId as any,
-        onStatusChange: s => console.log(`[useFhevm] createFhevmInstance status changed: ${s}`),
+        provider: _providerRef.current,
+        mockChains: _mockChainsRef.current,
+        signal: abortController.signal,
+        onStatusChange: (s: string) => console.log(`[useFhevm] createFhevmInstance status changed: ${s}`),
       })
-        .then(i => {
-          if (thisSignal.aborted) return;
-          _assert(thisProvider === _providerRef.current, "thisProvider === _providerRef.current");
+        .then((i: FhevmInstance) => {
+          if (abortController.signal.aborted) {
+            return;
+          }
 
           _setInstance(i);
-          _setError(undefined);
           _setStatus("ready");
+          _setError(undefined);
         })
-        .catch(e => {
-          if (thisSignal.aborted) return;
-
-          _assert(thisProvider === _providerRef.current, "thisProvider === _providerRef.current");
+        .catch((e: Error) => {
+          if (abortController.signal.aborted) {
+            return;
+          }
 
           _setInstance(undefined);
-          _setError(e as any);
           _setStatus("error");
+          _setError(e);
         });
     }
   }, [_isRunning, _providerChanged]);
 
-  return { instance, refresh, error, status };
-}
+  useEffect(() => {
+    return () => {
+      if (_abortControllerRef.current) {
+        _abortControllerRef.current.abort();
+        _abortControllerRef.current = null;
+      }
+    };
+  }, []);
 
+  return {
+    instance,
+    refresh,
+    error,
+    status,
+  };
+}
