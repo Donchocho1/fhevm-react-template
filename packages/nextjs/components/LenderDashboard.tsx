@@ -7,6 +7,12 @@ export function LenderDashboard() {
   const [applications, setApplications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isClient, setIsClient] = useState(false);
+  const [debugLogs, setDebugLogs] = useState<string[]>([]);
+
+  const addDebugLog = (message: string) => {
+    console.log('🔍 LENDER DEBUG:', message);
+    setDebugLogs(prev => [...prev.slice(-10), `${new Date().toLocaleTimeString()}: ${message}`]);
+  };
 
   useEffect(() => {
     setIsClient(true);
@@ -14,20 +20,34 @@ export function LenderDashboard() {
   }, []);
 
   const loadApplications = async () => {
+    addDebugLog('Starting to load applications...');
     try {
+      addDebugLog('Creating PrivateLoanSDK...');
       const loanSDK = await setupPrivateLoanSDK(11155111);
-      
+      addDebugLog('✅ PrivateLoanSDK created successfully');
+
       // Use fixed IDs instead of random ones for hydration
       const sampleApps = await Promise.all(
         [101, 102, 103].map(async (id) => {
+          addDebugLog(`Processing application ${id}...`);
+          
+          addDebugLog(`Getting application status for ${id}...`);
           const status = await loanSDK.getApplicationStatus(id);
+          addDebugLog(`✅ Application ${id} status: ${JSON.stringify(status)}`);
+          
           // Fix the credit score calculation - use proper hex conversion
           const baseScore = 600 + (id % 3) * 50;
-          const decryptedScore = await loanSDK.decryptCreditScore(
-            `0x656e637279707465645f${baseScore}00000000000000000000000000000000`
-          );
-          return { 
-            ...status, 
+          addDebugLog(`Application ${id} base score: ${baseScore}`);
+          
+          const encryptedScore = `0x656e637279707465645f${baseScore}00000000000000000000000000000000`;
+          addDebugLog(`Application ${id} encrypted score: ${encryptedScore}`);
+          
+          addDebugLog(`Decrypting score for application ${id}...`);
+          const decryptedScore = await loanSDK.decryptCreditScore(encryptedScore);
+          addDebugLog(`✅ Application ${id} decrypted score: ${decryptedScore}`);
+          
+          return {
+            ...status,
             decryptedScore,
             applicationId: id,
             requestedAmount: `${2 + (id % 3)} ETH`, // Sample amounts
@@ -35,9 +55,11 @@ export function LenderDashboard() {
           };
         })
       );
-      
+
+      addDebugLog(`✅ Successfully loaded ${sampleApps.length} applications`);
       setApplications(sampleApps);
     } catch (error) {
+      addDebugLog(`❌ Failed to load applications: ${error}`);
       console.error('Failed to load applications:', error);
     } finally {
       setLoading(false);
@@ -45,12 +67,14 @@ export function LenderDashboard() {
   };
 
   const handleApprove = async (applicationId: number) => {
+    addDebugLog(`Approving application ${applicationId}`);
     alert(`Application ${applicationId} approved!`);
     // Refresh applications to show updated status
     loadApplications();
   };
 
   const handleReject = async (applicationId: number) => {
+    addDebugLog(`Rejecting application ${applicationId}`);
     alert(`Application ${applicationId} rejected!`);
     // Refresh applications to show updated status
     loadApplications();
@@ -61,11 +85,46 @@ export function LenderDashboard() {
   }
 
   if (loading) {
-    return <div className="text-center py-8 text-gray-600">Loading applications...</div>;
+    return (
+      <div className="w-full">
+        <div className="text-center py-8 text-gray-600">Loading applications...</div>
+        {/* Debug logs during loading */}
+        <div className="mt-4 p-4 bg-gray-100 rounded-lg">
+          <h4 className="font-semibold mb-2">Debug Logs:</h4>
+          <div className="text-xs space-y-1 max-h-32 overflow-y-auto">
+            {debugLogs.map((log, index) => (
+              <div key={index} className="font-mono">{log}</div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="w-full">
+      {/* Debug Panel */}
+      <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="flex justify-between items-center mb-2">
+          <h4 className="font-semibold text-blue-800">FHEVM Debug Panel</h4>
+          <button 
+            onClick={loadApplications}
+            className="bg-blue-600 text-white px-3 py-1 rounded text-sm"
+          >
+            Reload Data
+          </button>
+        </div>
+        <div className="text-xs space-y-1 max-h-32 overflow-y-auto">
+          {debugLogs.map((log, index) => (
+            <div key={index} className="font-mono">{log}</div>
+          ))}
+        </div>
+        <div className="mt-2 text-xs text-blue-600">
+          Total Applications: {applications.length} | 
+          Last Update: {new Date().toLocaleTimeString()}
+        </div>
+      </div>
+
       {/* Stats Summary */}
       <div className="grid grid-cols-3 gap-4 mb-6">
         <div className="bg-primary-50 rounded-lg p-3 text-center border border-primary-200">
@@ -89,8 +148,8 @@ export function LenderDashboard() {
       {/* Applications Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {applications.map((app) => (
-          <div 
-            key={app.applicationId} 
+          <div
+            key={app.applicationId}
             className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-all duration-200 flex flex-col h-full"
           >
             {/* Header with ID and Status - FIXED HEIGHT */}
@@ -106,7 +165,7 @@ export function LenderDashboard() {
                 {app.status?.toUpperCase() || 'PENDING'}
               </span>
             </div>
-            
+
             {/* Application Details - Compact Layout */}
             <div className="p-3 space-y-3 flex-grow">
               {/* Applicant - Compact */}
@@ -149,7 +208,7 @@ export function LenderDashboard() {
                 </div>
               </div>
             </div>
-            
+
             {/* Action Buttons - ALL CLICKABLE, NO CHECKMARKS */}
             <div className="p-3 border-t border-gray-100 bg-gray-50 rounded-b-lg">
               <div className="flex gap-2">

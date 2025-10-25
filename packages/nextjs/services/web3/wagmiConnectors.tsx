@@ -6,6 +6,8 @@ import {
   rainbowWallet,
   safeWallet,
   walletConnectWallet,
+  trustWallet,
+  injectedWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 import { rainbowkitBurnerWallet } from "burner-connector";
 import * as chains from "viem/chains";
@@ -19,6 +21,8 @@ const wallets = [
   ledgerWallet,
   coinbaseWallet,
   rainbowWallet,
+  trustWallet,
+  injectedWallet,
   safeWallet,
   ...(!targetNetworks.some(network => network.id !== (chains.hardhat as chains.Chain).id) || !onlyLocalBurnerWallet
     ? [rainbowkitBurnerWallet]
@@ -29,8 +33,6 @@ const wallets = [
  * wagmi connectors for the wagmi context
  */
 export const wagmiConnectors = () => {
-  // Only create connectors on client-side to avoid SSR issues
-  // TODO: update when https://github.com/rainbow-me/rainbowkit/issues/2476 is resolved
   if (typeof window === "undefined") {
     return [];
   }
@@ -38,13 +40,16 @@ export const wagmiConnectors = () => {
   return connectorsForWallets(
     [
       {
-        groupName: "Supported Wallets",
-        wallets,
+        groupName: "Recommended",
+        wallets: wallets.slice(0, 4), // MetaMask, WalletConnect, Ledger, Coinbase
+      },
+      {
+        groupName: "Other Wallets", 
+        wallets: wallets.slice(4), // Rainbow, Trust, Injected, Safe
       },
     ],
-
     {
-      appName: "helper-2",
+      appName: "Loan DApp",
       projectId: scaffoldConfig.walletConnectProjectId,
     },
   );

@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  webpack: (config) => {
-    config.externals.push("pino-pretty", "lokijs", "encoding");
-    return config;
+  output: 'export',
+  trailingSlash: true,
+  images: {
+    unoptimized: true
   },
   typescript: {
     ignoreBuildErrors: true,
@@ -10,6 +11,10 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-};
+  // Disable server-side features for static export
+  experimental: {
+    esmExternals: false
+  }
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig

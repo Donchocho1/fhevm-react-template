@@ -63,7 +63,6 @@ export default function Home() {
                   </li>
                   <li>• Network: Sepolia Testnet</li>
                   <li>• Max Loan: 10 ETH</li>
-                  <li>• Demo: No wallet required</li>
                 </ul>
               </div>
             </div>

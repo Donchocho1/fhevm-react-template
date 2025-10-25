@@ -11,7 +11,7 @@ export function DemoMode() {
         <div className="text-center sm:text-left">
           <h3 className="font-semibold text-yellow-800 text-lg">🎮 Demo Mode Active</h3>
           <p className="text-yellow-700 text-sm">
-            No wallet connection required! Experience confidential computing with simulated FHE operations.
+            Experience confidential computing with simulated FHE operations.
           </p>
         </div>
         <div className="flex items-center gap-2">

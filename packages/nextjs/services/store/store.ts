@@ -32,18 +32,24 @@ export type GlobalState = {
   setTargetNetwork: (newValue: TargetNetwork) => void;
 };
 
-// Default target network (you can customize this)
+// Use Sepolia as default target network - HARDCODED VERSION
 const defaultTargetNetwork: TargetNetwork = {
-  id: 31337, // Hardhat local network
-  name: "Hardhat",
+  id: 11155111, // Sepolia chain ID
+  name: "Sepolia",
   nativeCurrency: {
     name: "Ether",
-    symbol: "ETH",
+    symbol: "ETH", 
     decimals: 18,
   },
   rpcUrls: {
     default: {
-      http: ["http://localhost:8545"],
+      http: ["https://sepolia.infura.io/v3/9bd611e42ecc45e0b3a752ea6d3c04ef"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Etherscan",
+      url: "https://sepolia.etherscan.io",
     },
   },
 };
@@ -60,4 +66,4 @@ export const useGlobalState = create<GlobalState>((set) => ({
     set((state) => ({ nativeCurrency: { ...state.nativeCurrency, isFetching: newValue } })),
   setTargetNetwork: (newValue: TargetNetwork): void =>
     set(() => ({ targetNetwork: newValue })),
-}));
+}));    

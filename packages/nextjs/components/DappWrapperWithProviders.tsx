@@ -20,10 +20,10 @@ export const queryClient = new QueryClient({
   },
 });
 
-// Universal FHEVM configuration - using Sepolia
+// Universal FHEVM configuration - using Infura RPC
 const fhevmConfig = {
   chainId: 11155111, // Sepolia chain ID
-  provider: typeof window !== 'undefined' ? window.ethereum : undefined,
+  provider: "https://sepolia.infura.io/v3/0a2a86492f954562ad027d1b33c421df",
   autoInit: true
 };
 
@@ -42,6 +42,7 @@ export const DappWrapperWithProviders = ({ children }: { children: React.ReactNo
         <RainbowKitProvider
           avatar={BlockieAvatar}
           theme={mounted ? (isDarkMode ? darkTheme() : lightTheme()) : lightTheme()}
+          modalSize="wide"
         >
           <ProgressBar height="3px" color="#2299dd" />
           {/* Wrap with FHEVMProvider using universal config */}

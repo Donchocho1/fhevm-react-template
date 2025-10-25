@@ -1,131 +1,170 @@
-🏦 Loan DApp - Confidential Lending Platform
-A fully homomorphic encryption (FHE) powered decentralized application for confidential loan processing. Built with FHEVM technology to ensure complete privacy for financial data.
+emmanuel@DESKTOP-2T97LRT:~/loan-dapp$ cat > README.md << 'EOF'
+# 🏆 Universal FHEVM SDK - Competition Submission
 
-🌟 Features
-🔐 Confidential Loan Applications
-Encrypted Credit Scoring - Submit loan applications with fully encrypted financial data
+> **Framework-agnostic FHEVM SDK with confidential lending application**  
+> *Built for the FHEVM React Template Competition - A universal SDK that works in any JavaScript environment*
 
-Private Financial Information - Your sensitive data remains confidential throughout the process
+## 🚀 Quick Start (5 Lines of Code)
 
-Secure Data Handling - End-to-end encryption using FHEVM technology
+```javascript
+// Any framework - React, Vue, Plain JS, Node.js
+import { setupUniversalFHEVM } from '@loan-dapp/sdk';
 
-🏛️ Lender Dashboard
-Secure Decryption - Authorized lenders can securely decrypt and review applications
+const sdk = await setupUniversalFHEVM(11155111); // Sepolia
+const encrypted = await sdk.encrypt(42);
+console.log('🔐 Encrypted:', encrypted.ciphertext);
 
-Privacy-Preserving - Maintain applicant privacy while enabling legitimate review
-
-EIP-712 Signing - User-controlled decryption with cryptographic signatures
-
-🛡️ Advanced Security
-Fully Homomorphic Encryption - Perform computations on encrypted data
-
-Zero-Knowledge Principles - Verify eligibility without exposing raw data
-
-Blockchain Integration - Transparent and auditable process on-chain
-
-🏗️ Architecture
+🌟 Live Demos
+Demo	Framework	Status	Link
+Loan DApp	Next.js	✅ Production Ready	Live Demo
+Vue.js Demo	Vue 3	✅ Demo Ready	packages/vue-demo/
+Plain JS Demo	Vanilla JS	✅ Demo Ready	packages/plain-js-demo/
+🏗️ Universal Architecture
 text
 loan-dapp/
 ├── packages/
-│   ├── sdk/              # Universal FHEVM SDK
+│   ├── fhevm-sdk/           # 🎯 UNIVERSAL CORE SDK
 │   │   ├── src/
-│   │   │   ├── core/     # Framework-agnostic FHEVM client
-│   │   │   ├── adapters/react/  # React-specific bindings
-│   │   │   └── privateLoan.ts   # Loan-specific utilities
-│   ├── frontend/         # Next.js Loan Application
-│   │   ├── app/          # Next.js 14 app router
-│   │   ├── components/   # React components
-│   │   │   ├── LoanApplication.tsx
-│   │   │   ├── LenderDashboard.tsx
-│   │   │   └── DappWrapperWithProviders.tsx
-│   │   └── hooks/        # Custom React hooks
-│   └── hardhat/          # Smart contracts
-└── README.md
-🚀 Quick Start
-Prerequisites
-Node.js 18+
+│   │   │   ├── core/        # Framework-agnostic FHEVM client
+│   │   │   ├── universal.ts # Wagmi-like API
+│   │   │   └── adapters/    # Framework-specific adapters
+│   ├── nextjs/              # Next.js Loan DApp (Showcase)
+│   ├── vue-demo/            # Vue.js proof of concept
+│   └── plain-js-demo/       # Plain JavaScript proof
+🎯 Competition Requirements Met
+✅ Universal & Framework-Agnostic
+No React dependencies in core SDK
 
-pnpm package manager
+Works with React, Vue, Plain JS, Node.js
 
-Modern browser with Ethereum wallet (MetaMask, etc.)
+Separate adapters for framework-specific code
 
-Installation
+✅ Wagmi-like API Structure
+typescript
+// Familiar patterns for web3 developers
+const sdk = createFHEVMConfig({
+  chainId: 11155111,
+  provider: ethersProvider,
+  autoInit: true
+});
+
+// React hooks (optional adapter)
+const { encrypt, decrypt } = useUniversalFHEVM();
+✅ Quick Setup & Developer Experience
 bash
+# Install (1 line)
+npm install @loan-dapp/sdk
+
+# Use (4 lines)
+import { setupUniversalFHEVM } from '@loan-dapp/sdk';
+const sdk = await setupUniversalFHEVM(11155111);
+const encrypted = await sdk.encrypt(42);
+✅ Complete FHEVM Flow
+🔐 Encryption: sdk.encrypt(data)
+
+🔓 Decryption: sdk.decrypt(request)
+
+🏥 Health Checks: sdk.healthCheck()
+
+📦 Batch Operations: sdk.encryptBatch([1,2,3])
+
+✅ Multiple Environment Showcases
+Next.js: Full loan application with FHE
+
+Vue.js: Framework-agnostic proof
+
+Plain JS: No dependencies required
+
+🏦 Loan DApp Features
+🔐 Confidential Lending
+typescript
+// Encrypted credit scoring
+const application = {
+  encryptedCreditScore: await sdk.encrypt(creditScore),
+  encryptedAmount: await sdk.encrypt(loanAmount),
+  loanPurpose: 'business'
+};
+🏛️ Lender Dashboard
+Secure EIP-712 decryption requests
+
+Privacy-preserving application review
+
+Encrypted data processing
+
+🎮 Demo Mode
+No wallet required for testing
+
+Simulated FHE operations
+
+Competition-ready reliability
+
+📦 Installation & Setup
+bash
+# Clone repository
+git clone https://github.com/Donchocho1/fhevm-react-template
+cd loan-dapp
+
 # Install dependencies
 pnpm install
 
-# Build the FHEVM SDK
+# Build universal SDK
 pnpm sdk:build
 
-# Start the development server
-pnpm app:dev
-Visit http://localhost:3000 to access the Loan DApp.
-
-📦 Packages
-@loan-dapp/sdk
-Universal FHEVM SDK providing encryption, decryption, and FHE utilities.
-
-typescript
-import { FHEVMClient, loanUtilities } from '@loan-dapp/sdk';
-
-// Initialize FHEVM client
-const client = new FHEVMClient(provider);
-await client.init();
-
-// Encrypt credit score
-const encryptedScore = await loanUtilities.encryptCreditScore(750);
-@loan-dapp/frontend
-Next.js frontend application with Tailwind CSS styling.
-
+# Start demos
+pnpm app:dev              # Next.js Loan DApp
+cd packages/vue-demo && python3 -m http.server 3001    # Vue.js
+cd packages/plain-js-demo && python3 -m http.server 3002 # Plain JS
 🔧 Development
 Build Commands
 bash
 # Build SDK
 pnpm sdk:build
 
-# Develop frontend
+# Develop Next.js app
 pnpm app:dev
 
-# Build for production
-pnpm app:build
+# Test across frameworks
+pnpm test:all
 Smart Contracts
 bash
-# Compile contracts
+# Compile & deploy
 pnpm contracts:compile
-
-# Deploy contracts
 pnpm contracts:deploy
 🛠️ Technology Stack
 Frontend: Next.js 14, React, TypeScript, Tailwind CSS
 
-FHE Technology: FHEVM, Fully Homomorphic Encryption
+FHE Core: Universal FHEVM SDK, Fully Homomorphic Encryption
 
-Blockchain: Ethereum, Hardhat, Ethers.js
+Blockchain: Ethereum, Hardhat, Ethers.js, Viem
 
-Wallet Integration: RainbowKit, Wagmi
+Wallet: RainbowKit, Wagmi
 
 Package Manager: pnpm workspaces
 
 🔒 Security Features
-Encrypted Data Storage - Financial data encrypted using FHE
+Encrypted Data Storage - FHE-protected financial data
 
-User-Controlled Decryption - EIP-712 signatures for authorization
+User-Controlled Decryption - EIP-712 signatures
 
-Zero Data Exposure - Raw data never exposed to third parties
+Zero Data Exposure - Raw data never exposed
 
-Auditable Process - All operations recorded on blockchain
+Auditable Process - Blockchain transparency
 
-💡 Use Cases
-Confidential Loan Applications - Apply for loans without exposing financial history
+🎥 Video Walkthrough
+*[Include your 3-5 minute demo video link here]*
 
-Private Credit Scoring - Evaluate creditworthiness while preserving privacy
+Highlights:
 
-Secure Lending Platforms - Build compliant financial applications
+Universal SDK working across frameworks
 
-Privacy-First Finance - DeFi applications with enhanced privacy
+5-line setup demonstration
+
+Loan DApp with FHE encryption
+
+Framework-agnostic architecture
 
 🤝 Contributing
-We welcome contributions to improve the Loan DApp:
+We welcome contributions to enhance the Universal FHEVM SDK:
 
 Fork the repository
 
@@ -139,12 +178,10 @@ Submit a pull request
 MIT License
 
 🙏 Acknowledgments
-FHEVM team for the fully homomorphic encryption technology
+FHEVM Team for fully homomorphic encryption technology
 
-Ethereum community for blockchain infrastructure
+Ethereum Community for blockchain infrastructure
 
-Open source contributors for various dependencies
+Competition Judges for the opportunity to showcase universal FHEVM
 
-Ready to experience confidential lending? Clone the repository and follow the quick start guide to run your own instance of the Loan DApp!
-
-
+Ready to build confidential applications? The Universal FHEVM SDK works everywhere - from React to Vue to plain JavaScript! 🚀
