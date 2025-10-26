@@ -77,7 +77,6 @@ export const FHECounterDemo = () => {
           )}
         </div>
 
-        {/* Rest of your existing component remains the same */}
         <div className="flex items-center justify-between">
           <span className="text-gray-600">Wallet Connection:</span>
           <span className={`px-3 py-1 rounded-full text-sm font-medium ${

@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Private Loan DApp - Universal FHEVM SDK Demo",
-  description: "Confidential lending with Fully Homomorphic Encryption - No wallet required",
+  description: "Confidential lending with Fully Homomorphic Encryption",
 };
 
 export default function RootLayout({

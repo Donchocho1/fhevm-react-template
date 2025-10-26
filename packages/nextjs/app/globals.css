@@ -54,7 +54,7 @@ pre, code, .font-mono {
   font-weight: bold !important;
 }
 
-/* More specific targeting */
+/* specific targeting */
 div.flex.flex-col.items-center.mr-1 > .min-h-0.h-auto,
 div.flex.flex-col.items-center.mr-1 > .text-xs {
   color: #FFD700 !important;

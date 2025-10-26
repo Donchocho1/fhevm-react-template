@@ -37,7 +37,6 @@ export class PrivateLoanClient {
    * Encrypt credit score (mock implementation for universal usage)
    */
   private encryptCreditScore(score: number): string {
-    // In a real implementation, this would use FHE encryption
     // For universal demo, return a mock encrypted value
     const mockEncrypted = `0x${Buffer.from(`encrypted_${score}`).toString('hex').padEnd(64, '0')}`;
     console.log('🔐 Mock encrypted score:', score, '->', mockEncrypted);
@@ -93,8 +92,6 @@ export class PrivateLoanClient {
   async decryptCreditScore(encryptedScore: string): Promise<number> {
     console.log('🔓 Decrypting score:', encryptedScore);
     
-    // Mock decryption - in real implementation this would use FHE
-    // Extract the original score from our mock encryption
     if (encryptedScore.startsWith('0x')) {
       const hex = encryptedScore.slice(2);
       const decoded = Buffer.from(hex.substring(0, 20), 'hex').toString();

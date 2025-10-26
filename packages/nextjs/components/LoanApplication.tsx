@@ -19,7 +19,6 @@ export function LoanApplication() {
     console.log('🧪 INITIALIZING FHEVM FOR COMPETITION DEMO...');
 
     try {
-      // For competition demo, we'll use a robust approach
       console.log('🚀 Starting FHEVM initialization...');
 
       // Try real FHEVM first
@@ -78,7 +77,7 @@ export function LoanApplication() {
     } catch (error: any) {
       console.error('❌ FHEVM completely failed:', error);
 
-      // Ultimate fallback - create a simple demo instance
+      // create a simple demo instance
       const fallbackInstance = {
         encrypt: async (data: any) => {
           const encrypted = `0x656e637279707465645f${data}00000000000000000000000000000000`;
@@ -107,7 +106,7 @@ export function LoanApplication() {
     }
   };
 
-  // DIRECT WALLET DETECTION - bypasses wagmi completely
+  // DIRECT WALLET DETECTION 
   useEffect(() => {
     const checkWalletConnection = () => {
       const ethereum = (window as any).ethereum;
@@ -188,7 +187,7 @@ export function LoanApplication() {
 
       if (fhevmInstance) {
         try {
-          // Use the FHEVM instance (real or demo)
+          // Use the FHEVM instance
           console.log('🔐 Encrypting credit score...');
           encryptedCreditScore = await fhevmInstance.encrypt(creditScore);
           
@@ -337,7 +336,6 @@ export function LoanApplication() {
         </div>
       </div>
 
-      {/* Rest of your form remains the same */}
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Credit Score */}
         <div>

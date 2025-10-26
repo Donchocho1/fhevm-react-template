@@ -32,7 +32,7 @@ export type GlobalState = {
   setTargetNetwork: (newValue: TargetNetwork) => void;
 };
 
-// Use Sepolia as default target network - HARDCODED VERSION
+// Use Sepolia as default target network 
 const defaultTargetNetwork: TargetNetwork = {
   id: 11155111, // Sepolia chain ID
   name: "Sepolia",

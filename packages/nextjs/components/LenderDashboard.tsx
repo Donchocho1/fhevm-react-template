@@ -152,7 +152,7 @@ export function LenderDashboard() {
             key={app.applicationId}
             className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-all duration-200 flex flex-col h-full"
           >
-            {/* Header with ID and Status - FIXED HEIGHT */}
+            {/* Header with ID and Status */}
             <div className="flex justify-between items-center p-3 border-b border-gray-100 bg-gradient-to-r from-primary-50 to-primary-25 rounded-t-lg min-h-[60px]">
               <h3 className="font-bold text-gray-800 text-sm uppercase tracking-wide flex-shrink-0">
                 App #{app.applicationId}
@@ -209,7 +209,7 @@ export function LenderDashboard() {
               </div>
             </div>
 
-            {/* Action Buttons - ALL CLICKABLE, NO CHECKMARKS */}
+            {/* Action Buttons - ALL CLICKABLE */}
             <div className="p-3 border-t border-gray-100 bg-gray-50 rounded-b-lg">
               <div className="flex gap-2">
                 <button

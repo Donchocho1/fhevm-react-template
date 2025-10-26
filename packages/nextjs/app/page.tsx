@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className="min-h-screen py-8">
       <div className="container mx-auto px-4">
-        {/* Removed the duplicate header section since it's now in layout.tsx */}
+        
         
         {/* Demo Mode Banner */}
         <DemoMode />
