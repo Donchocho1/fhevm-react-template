@@ -91,7 +91,7 @@ cd packages/plain-js-demo && python3 -m http.server 3002
 ```
 ### 📹 **Video Walkthrough**
 **Demonstrating:**
-
+**YouTube: https://youtu.be/NDiYPpB6Zh0**
 + Live Loan DApp at https://fhevm-react-template.onrender.com
 - Local framework proofs running Vue.js and Plain JS
 * Universal SDK architecture and quick setup
